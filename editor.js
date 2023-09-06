@@ -1,17 +1,18 @@
 /*
  * This editor shows the possible faces that can be created
  */
-
 const canvasWidth = 960;
 const canvasHeight = 500;
-const bg_color = [71, 222, 219];
+let face;
+const bg_color = myBgCol;
 let slider1, slider2, slider3, slider4, slider5;
-let slider6, slider7, slider8, slider9, slider10;
+let slider6, slider7, slider8, slider9, slider10,slider11,slider12,slider13,slider14,slider15;
+let slider16,slider17,slider18,slider19,slider20;
 let faceSelector;
 let faceGuideCheckbox;
 
 function setup () {
-
+  face=new Face();
   // create the drawing canvas, save the canvas element
   let main_canvas = createCanvas(canvasWidth, canvasHeight);
   main_canvas.parent('canvasContainer');
@@ -27,6 +28,16 @@ function setup () {
   slider8 = createSlider(0, 100, 50);
   slider9 = createSlider(0, 100, 50);
   slider10 = createSlider(0, 100, 50);
+  slider11 = createSlider(0, 100, 50);
+  slider12 = createSlider(0, 100, 50);
+  slider13 = createSlider(0, 100, 50);
+  slider14 = createSlider(0, 100, 50);
+  slider15 = createSlider(0, 100, 50);
+  slider16 = createSlider(0, 100, 50);
+  slider17 = createSlider(0, 100, 50);
+  slider18 = createSlider(0, 100, 50);
+  slider19 = createSlider(0, 100, 50);
+  slider20 = createSlider(0, 100, 50);
 
   slider1.parent('slider1Container');
   slider2.parent('slider2Container');
@@ -38,6 +49,16 @@ function setup () {
   slider8.parent('slider8Container');
   slider9.parent('slider9Container');
   slider10.parent('slider10Container');
+  slider11.parent('slider11Container');
+  slider12.parent('slider12Container');
+  slider13.parent('slider13Container');
+  slider14.parent('slider14Container');
+  slider15.parent('slider15Container');
+  slider16.parent('slider16Container');
+  slider17.parent('slider17Container');
+  slider18.parent('slider18Container');
+  slider19.parent('slider19Container');
+  slider20.parent('slider20Container');
 
   faceGuideCheckbox = createCheckbox('', false);
   faceGuideCheckbox.parent('checkbox1Container');
@@ -48,6 +69,7 @@ function setup () {
   faceSelector.option('3');
   faceSelector.value('1');
   faceSelector.parent('selector1Container');
+  
 }
 
 
@@ -69,6 +91,16 @@ function draw () {
   let s8 = slider8.value();
   let s9 = slider9.value();
   let s10 = slider10.value();
+  let s11 = slider11.value();
+  let s12 = slider12.value();
+  let s13 = slider13.value();
+  let s14 = slider14.value();
+  let s15 = slider15.value();
+  let s16 = slider16.value();
+  let s17 = slider17.value();
+  let s18 = slider18.value();
+  let s19 = slider19.value();
+  let s20 = slider20.value();
 
   let show_face_guide = faceGuideCheckbox.checked();
 
@@ -83,21 +115,33 @@ function draw () {
   scale(face_scale);
 
   push();
-  if (mode == '1') {
+  
    // draw face using values mapped from 3 sliders
-   let tilt_value = map(s1, 0, 100, -90, 90);
-   let mouth_value = map(s2, 0, 100, 0.5, 10);
-   let eye_value = int(map(s3, 0, 100, 1, 3));
-   orangeAlienFace(tilt_value, eye_value, mouth_value);
-  }
-
-  if (mode == '2') {
-     // let slider value 1 indicate thinness
-     blockyFace(s1);
-  }
-  if (mode == '3') {
-    simplePurpleFace();
-  }
+   face.sideBurn=sideBurns[Math.floor(map(s1, 0, 100, 0,sideBurns.length))];
+   face.sideBurnHeight=map(s2, 0, 100, minSideBurnHeight, maxSideBurnHeight);
+   
+   face.noseHeight=map(s4, 0, 100, minNoseHeight, maxNoseHeight);
+   face.noseDirection=noseDirections[Math.floor(map(s5, 0, 100, 0,noseDirections.length))];
+   face.noseY=map(s6, 0, 100, minNoseY, maxNoseY);
+   face.noseWidth=map(s3, 0, 100, minNoseWidth, face.getMaxNoseWidth());
+   
+   face.eyeWidth=map(s8, 0, 100, minEyeWidth, maxEyeWidth);
+   face.eyeHeight=map(s9, 0, 100, minEyeHeight, maxEyeHeight);
+   face.innerEyeWidth=map(s10, 0, 100, minInnerEyeWidth, maxInnerEyeWidth);
+   face.innerEyeHeight=map(s11, 0, 100, minInnerEyeHeight, maxInnerEyeHeight);
+   face.eyeX=map(s7, 0, 100, minEyeX, face.getMaxEyeX());
+   face.earShape=earShapes[Math.floor(map(s12, 0, 100, 0,earShapes.length))];
+   face.earY=map(s13, 0, 100, minEarY, maxEarY);
+   face.innerEarWidth=face.earWidth*map(s14, 0, 100, minInnerEarWidth, maxInnerEarWidth);
+   face.innerEarHeight=face.headHeight*map(s15, 0, 100, minInnerEarHeight, face.getMaxInnerEarHeight());
+   face.hasTeeth=0.5<map(s16, 0, 100, 0,1);
+   face.mouthWidth=map(s17, 0, 100, minMouthWidth,maxMouthWidth);
+   face.mouthHeight=map(s18,0,100,minMouthHeight,face.getMaxMouthHeight());
+   face.mouthY=map(s19, 0, 100, face.getMinMouthY(), face.getMaxMouthY());
+   face.numberOfteeth=Math.floor(map(s20, 0, 100, minNumberOfteeth,maxNumberOfTeeth));
+   translate(0, 3);
+   face.drawFace();
+  
 
   pop();
 
